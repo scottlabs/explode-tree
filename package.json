@@ -1,0 +1,11 @@
+{
+  "name": "explode-tree",
+  "version": "1.0.0",
+  "description": "Takes an array of filenames and produces a tree object",
+  "main": "explodeTree.js",
+  "scripts": {
+    "test": "node test.js"
+  },
+  "author": "Kevin Scott",
+  "license": "ISC"
+}
