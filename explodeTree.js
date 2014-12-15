@@ -27,7 +27,7 @@ function explodeTree(files, delimiter) {
 
         switch (getType(obj[key])) {
             case 'undefined':
-                obj[key] = paths.join(delimiter);
+                obj[key] = [paths.join(delimiter)];
             break;
             case 'string':
                 obj[key] = [obj[key], paths.join(delimiter)];
@@ -42,7 +42,17 @@ function explodeTree(files, delimiter) {
         var val = obj[key];
         switch (getType(val)) {
             case 'array':
-                obj[key] = explodeTree(val, delimiter);
+                // do we need to process any of these
+                var process = false;
+                val.map(function(path) {
+                    path = path.split(delimiter);
+                    if ( path.length > 1 ) {
+                        process = true;
+                    }
+                });
+                if ( process ) {
+                    obj[key] = explodeTree(val, delimiter);
+                }
             break;
         }
     }
