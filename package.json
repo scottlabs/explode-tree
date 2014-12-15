@@ -6,6 +6,10 @@
   "scripts": {
     "test": "node test.js"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/scottlabs/explode-tree"
+  },
   "author": "Kevin Scott",
   "license": "ISC"
 }
