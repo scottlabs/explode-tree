@@ -1,37 +1,60 @@
-function explodeTree(files, delimiter) {
-    var obj = {};
-    if (!delimiter) {delimiter = '/';}
+function merge(obj, newObj) {
+    return obj.children.concat(newObj.children);
+};
+
+function processChildren(files, delimiter) {
+    var obj = [];
 
     files.map(function (file) {
-        var file = file.split('.').shift();
-        var paths = file.split(delimiter);
-        if (paths.length > 1) {
-            var key = paths.shift();
+        var file = file.split(delimiter);
+
+        if ( file.length > 1 ) {
+            var path = file.shift();
+
+            var node = {
+                type: 'dir',
+                path: path,
+                children: [file.join(delimiter)]
+            };
         } else {
-            var key = paths[0];
+            var node = {
+                type: 'file',
+                path: file.join(delimiter)
+            };
         }
-
-        if ( ! obj[key] ) {
-            obj[key] = [];
-        }
-        obj[key].push(paths.join(delimiter));
-
+        obj.push(node);
     });
 
-    for (var key in obj) {
-        var val = obj[key];
-        // do we need to process any of these
+    var dirs = {};
+    for ( var i=0;i<obj.length;i++ ) {
+        var node = obj[i];
         var process = false;
-        val.map(function(path) {
-            path = path.split(delimiter);
-            if ( path.length > 1 ) {
-                process = true;
+        if ( node.type === 'dir' ) {
+            var path = node.path;
+            // check if there are other dirs with the same name
+            if ( dirs[path] === undefined ) {
+                dirs[path] = i;
+            } else {
+                obj[dirs[path]].children = obj[dirs[path]].children.concat(obj[i].children);
+                obj.splice(i,1);
             }
-        });
-        if ( process ) {
-            obj[key] = explodeTree(val, delimiter);
+
+        }
+    };
+
+    for ( var i=0;i<obj.length;i++ ) {
+        var node = obj[i];
+        if ( node.type === 'dir' ) {
+            obj[i].children = processChildren(obj[i].children, delimiter);
         }
     }
+    return obj;
+}
+function explodeTree(files, delimiter) {
+    var obj = {children: []};
+    if (!delimiter) {delimiter = '/';}
+
+    obj.children = processChildren(files, delimiter);
 
     return obj;
 };
