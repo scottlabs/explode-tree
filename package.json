@@ -1,6 +1,6 @@
 {
   "name": "explode-tree",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Takes an array of filenames and produces a tree object",
   "main": "explodeTree.js",
   "scripts": {

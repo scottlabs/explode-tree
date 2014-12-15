@@ -35,8 +35,8 @@ var _ = require('underscore');
             }
         };
 
-        //var obj = explodeTree(files);
-        //runTest(obj, expectedObj);
+        var obj = explodeTree(files);
+        runTest(obj, expectedObj);
 })();
 
 function runTest(obj, expectedObj) {
